@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# Build output (tsc outDir) and npm pack tarballs
+dist/
+coverage/
+*.tgz
+
+# Environment files
+.env
+.env.*
+
+# Logs
+*.log
+logs/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
