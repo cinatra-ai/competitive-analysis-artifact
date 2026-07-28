@@ -17,11 +17,11 @@ import type { SemanticArtifactManifest } from "@cinatra-ai/sdk-extensions";
 // Schema) — as the manifest of record in
 // `package.json` `cinatra.artifact.objectTypes`; the object-registry bridge
 // reads it there. Auto-derivation of the type from the pack is retired and
-// there is no manifest `mode` field. This typed export mirrors only the
-// DESCRIPTOR half (representation forms + matcher bundle) — the SDK
-// `SemanticArtifactManifest` contract the bridge type-checks the descriptor
-// against; the `objectTypes` claim block is validated host-side by the objects
-// manifest schema.
+// there is no manifest `mode` field. This typed export mirrors that manifest IN
+// FULL — the descriptor (representation forms + matcher bundle) AND the
+// `objectTypes` claim block — against the SDK `SemanticArtifactManifest`
+// contract, and the host pack parity suite pins the two structurally equal so
+// they cannot diverge.
 export const competitiveAnalysisArtifactManifest: SemanticArtifactManifest = {
   accepts: {
     file: {
@@ -30,8 +30,42 @@ export const competitiveAnalysisArtifactManifest: SemanticArtifactManifest = {
   },
   skills: {
     matchers: [
-      "@cinatra-ai/competitive-analysis-artifact:competitive-analysis-matcher",
+      "@cinatra-ai/competitive-analysis-matcher-skill:competitive-analysis-matcher",
     ],
   },
   matcherConfidenceThreshold: 0.7,
+  objectTypes: [
+    {
+      type: "@cinatra-ai/competitive-analysis-artifact:competitive-analysis",
+      claim: "dedicated",
+      dispositions: {
+        projection: "artifact-safe",
+        pinnable: true,
+        snapshotPolicy: "content",
+        sensitivity: "normal",
+        mutability: "draftable",
+      },
+      schema: {
+        type: "object",
+        properties: {
+          title: {
+            type: "string",
+          },
+          summary: {
+            type: "string",
+          },
+          contentMarkdown: {
+            type: "string",
+          },
+          competitors: {
+            type: "array",
+            items: {
+              type: "string",
+            },
+          },
+        },
+        additionalProperties: true,
+      },
+    },
+  ],
 };
